@@ -22,6 +22,8 @@ from image_app.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
 	path('image_upload', hotel_image_view, name = 'image_upload'),
+    #path('photo_editor', photo_editor, name='photo_editor'),
+    path('photo_editor/<str:image_name>/<path:image_path>/', photo_editor, name='photo_editor'),
 	#path('success', success, name = 'success'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
