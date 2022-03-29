@@ -1,14 +1,15 @@
 
 # Create your views here.
-from ast import Return
+import os
 from bdb import set_trace
 from textwrap import fill
 from tkinter.filedialog import SaveAs
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from .forms import HotelForm, ogImage
-from PIL import Image
+from PIL import Image, ImageOps
 
 # Create your views here.
 def hotel_image_view(request):
@@ -29,21 +30,45 @@ def hotel_image_view(request):
 	#not quite sure yet
 	return render(request, template_name='hotel_image_form.html', context={'form' : mysuperdupreform, 'images' : images})
 
-def photo_editor(request, image_name, image_path, image_style=None):
-	
-	if image_path != 'mod.png':
+def photo_editor(request, image_id, image_style=None):
+	image_data = ogImage.objects.get(pk=image_id)
+	initial_path = image_data.image.path
+	image = image_data.image
+	name = image_data.name
+	# if image_path != 'mod.png':
 		
-		img = Image.open('../image_upload' + image_path.removesuffix('/grayscale'))
-		img.save('mod.png')
+	# 	img = Image.open('../image_upload' + image_path.removesuffix('/grayscale'))
+	# 	img.save('mod.png')
+
+	# 	print(image_path)
 		
-	if image_style == 'grayscale/?':
-		gs_image = Image.open('mod.png').convert('L')
+	if image_style == 'grayscale':
+		gs_image = Image.open(f"../image_upload/media/{image}").convert('L')
+		
+
+		image_data.image.name = f'/images/grayscale{image_id}.png'
+		new_path = settings.MEDIA_ROOT + image_data.image.name
+		print('new_path = ' + new_path)
+		os.rename(initial_path, new_path)
+		image_data.save()
+		gs_image.save(f"../image_upload/media/images/grayscale{image_id}.png")
+		
+		# import pdb; pdb.set_trace()
+		#maybe return to photo_editor/1/ not ../image_style
+		image = image_data.image
+
+	if image_style == 'posterize':
+		print('something happend')
+	# 	answer = simpledialog.askinteger("Input", "What color do you want?", minvalue=1, maxvalue=8)
+
+	# 	# creating a image1 object 
+	# 	im1 = Image.open("mod.png") 
+
+	# 	# applying posterize method 
+	# 	im2 = ImageOps.posterize(im1, answer)
+
 	
-		gs_image.save('mod.png')
-		import pdb; pdb.set_trace()
-		image_path = 'mod.png'
-	
-	context = {'image_name': image_name, 'image_path' : image_path}
+	context = {'image' : image, 'name' : name}
 
 	return render(request, 'photo_editor.html', context)
 

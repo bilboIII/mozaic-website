@@ -21,7 +21,7 @@
           <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
             <div class="card h-100 p-4">
 				<!-- takes "image" from models.py and displays it" -->
-              <a href="{% url 'photo_editor' m.name m.image.url %}"><img src="{{ m.image.url }}"  class="img-thumbnail" alt="There should be an image here"></a>
+              <a href="{% url 'photo_editor' m.image_id %}"><img src="{{ m.image.url }}"  class="img-thumbnail" alt="There should be an image here"></a>
 			  <!-- var = m.image.url -->
 			  <h2 class="text-center">{{ m.name }}</h2>
             </div>

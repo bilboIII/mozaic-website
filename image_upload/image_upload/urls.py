@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from image_app.views import *
@@ -23,9 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 	path('image_upload/', hotel_image_view, name = 'image_upload'),
     #path('photo_editor', photo_editor, name='photo_editor'),
-    # path('photo_editor/<int:id>', photo_editor, name='photo_editor'),
-    path('photo_editor/<str:image_name>/<path:image_path>/', photo_editor, name='photo_editor'),
-    path('photo_editor/<str:image_name>/<path:image_path>/<str:image_style>/', photo_editor, name='photo_editor'),
+    path('photo_editor/<image_id>/', photo_editor, name='photo_editor'),
+    path('photo_editor/<image_id>/<str:image_style>/', photo_editor, name='photo_editor'),
+    # path('photo_editor/<str:image_name>/<path:image_path>/', photo_editor, name='photo_editor'),
+    # path('photo_editor/<str:image_name>/<path:image_path>/<str:image_style>/', photo_editor, name='photo_editor'),
 	#path('success', success, name = 'success'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

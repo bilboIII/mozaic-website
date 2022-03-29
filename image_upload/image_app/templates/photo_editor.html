@@ -8,12 +8,15 @@
     <title>Photo Editor</title>
 </head>
 <body>
-    <h1>Photo Editor for {{ image_name }}</h1>
-    <!-- <a href="grayscale/">Grayscale</a> -->
+    <h1>Photo Editor for {{ name }}</h1>
+    <a href="grayscale/">Grayscale</a>
     <form action="grayscale/">
         <input type="submit" value="Grayscale"/>
     </form>
-    <img src="{{ image_path }}" alt="404 error">
-
+    <a href="posterize/">Posterize</a>
+    <form action="posterize/">
+        <input type="submit" value="Posterize"/>
+    </form>
+    <img src="/media/{{ image }}" alt="404 error">
 </body>
 </html>
