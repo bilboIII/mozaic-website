@@ -4,19 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <title>Photo Editor</title>
 </head>
 <body>
-    <h1>Photo Editor for {{ name }}</h1>
-    <a href="grayscale/">Grayscale</a>
-    <form action="grayscale/">
-        <input type="submit" value="Grayscale"/>
-    </form>
-    <a href="posterize/">Posterize</a>
-    <form action="posterize/">
-        <input type="submit" value="Posterize"/>
-    </form>
-    <img src="/media/{{ image }}" alt="404 error">
+    <div class="container">
+        <h1 class="text-center text-primary bg-light">Photo Editor for {{ image_data.name }}</h1>
+        <div class="row">
+            <div class="col">
+                <form action="/photo_editor/{{ image_data.image_id }}/grayscale/">
+                    <input class="btn btn-secondary " type="submit" value="Grayscale"/>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/photo_editor/{{ image_data.image_id }}/posterize/">
+                    <input class="btn btn-info" type="submit" value="Posterize"/>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/photo_editor/{{ image_data.image_id }}/pixelate/">
+                    <input class="btn btn-warning" type="submit" value="Pixelate"/>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/photo_editor/{{ image_data.image_id }}/colorize/">
+                    <input class="btn btn-success" type="submit" value="Colorize"/>
+                </form>
+            </div>
+        </div>
+        <img src="/media/{{ image_data.image }}" class="mx-auto d-block bg-secondary" alt="404 error">
+        <form action="/image_upload/">
+            <input type="submit" value="Back to Image Upload"/>
+        </form>
+    </div>
 </body>
 </html>

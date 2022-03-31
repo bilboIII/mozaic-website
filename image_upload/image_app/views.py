@@ -45,9 +45,8 @@ def photo_editor(request, image_id, image_style=None):
 	if image_style == 'grayscale':
 		gs_image = Image.open(f"../image_upload/media/{image}").convert('L')
 		
-
-		image_data.image.name = f'/images/grayscale{image_id}.png'
-		new_path = settings.MEDIA_ROOT + image_data.image.name
+		image_data.image.name = f'images/grayscale{image_id}.png'
+		new_path = settings.MEDIA_ROOT + '\\' + image_data.image.name
 		print('new_path = ' + new_path)
 		os.rename(initial_path, new_path)
 		image_data.save()
@@ -55,20 +54,84 @@ def photo_editor(request, image_id, image_style=None):
 		
 		# import pdb; pdb.set_trace()
 		#maybe return to photo_editor/1/ not ../image_style
-		image = image_data.image
+		# image = image_data.image
 
 	if image_style == 'posterize':
-		print('something happend')
-	# 	answer = simpledialog.askinteger("Input", "What color do you want?", minvalue=1, maxvalue=8)
+		answer = 3
+		
+		# creating a image1 object 
+		im1 = Image.open(f"../image_upload/media/{image}") 
+		# applying posterize method 
+		im2 = ImageOps.posterize(im1, answer)
 
-	# 	# creating a image1 object 
-	# 	im1 = Image.open("mod.png") 
+		image_data.image.name = f'images/posterize{image_id}.png'
+		new_path = settings.MEDIA_ROOT + '\\' + image_data.image.name
+		print('new_path = ' + new_path)
+		os.rename(initial_path, new_path)
+		image_data.save()
 
-	# 	# applying posterize method 
-	# 	im2 = ImageOps.posterize(im1, answer)
+		im2.save(f"../image_upload/media/images/posterize{image_id}.png")
+		
+	if image_style == 'pixelate':
+		answer = 3
+		
+		img = Image.open(f"../image_upload/media/{image}")
+		w = 78
+		h = 108
+		imgSmall = img.resize((w, h), resample=Image.BILINEAR)
+		pixel = imgSmall.resize(img.size,Image.NEAREST)
 
-	
-	context = {'image' : image, 'name' : name}
+		image_data.image.name = f'images/pixelate{image_id}.png'
+		new_path = settings.MEDIA_ROOT + '\\' + image_data.image.name
+		print('new_path = ' + new_path)
+		os.rename(initial_path, new_path)
+		image_data.save()
+
+		pixel.save(f"../image_upload/media/images/pixelate{image_id}.png")
+
+	if image_style == 'colorize':
+		colors = [(0, 0, 255), (255, 0, 0), (255, 153, 0), (255, 255, 0), (255, 255, 255)] #this shoud be the base colors, also idea the initialcolor for the colorchooser
+		
+		#get a list of the picture
+		img = Image.open(f"../image_upload/media/{image}")
+		img.convert("RGB")
+		sequence_of_pixels = img.getdata()
+
+		#take img and colorize it
+		newPic = []
+
+		for x in sequence_of_pixels:
+			#blue the first color in 'colors' list
+			if x in range(0, 91):
+				color = colors[0]
+				#red the second color in 'colors' list
+			elif x in range(91, 121):
+				color = colors[1]
+				#orange the third color in 'colors' list
+			elif x in range(121, 151):
+				color = colors[2]
+				#yellow the forth color in 'colors' list
+			elif x in range(151, 180):
+				color = colors[3]
+				#white the fith color in 'colors' list
+			else:
+				color = colors[4]
+			
+			newPic.append(color)
+
+		#creats new image and saves the new data to said image
+		img1 = Image.new("RGB", (img.size), (255, 255, 255))
+
+		img1.putdata(newPic)
+
+		image_data.image.name = f'images/colorize{image_id}.png'
+		new_path = settings.MEDIA_ROOT + '\\' + image_data.image.name
+		print('new_path = ' + new_path)
+		os.rename(initial_path, new_path)
+		image_data.save()
+
+		img1.save(f"../image_upload/media/images/colorize{image_id}.png")
+	context = {'image_data' : image_data}
 
 	return render(request, 'photo_editor.html', context)
 
