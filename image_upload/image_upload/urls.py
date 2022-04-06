@@ -21,13 +21,11 @@ from image_app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path('image_upload/', hotel_image_view, name = 'image_upload'),
+	path('image_upload/', image_view, name = 'image_upload'),
     #path('photo_editor', photo_editor, name='photo_editor'),
     path('photo_editor/<image_id>/', photo_editor, name='photo_editor'),
     path('photo_editor/<image_id>/<str:image_style>/', photo_editor, name='photo_editor'),
-    # path('photo_editor/<str:image_name>/<path:image_path>/', photo_editor, name='photo_editor'),
-    # path('photo_editor/<str:image_name>/<path:image_path>/<str:image_style>/', photo_editor, name='photo_editor'),
-	#path('success', success, name = 'success'),
+    path('download/<image_id>/', download_file),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # if settings.DEBUG:
